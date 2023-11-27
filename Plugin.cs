@@ -12,33 +12,30 @@ namespace LethalPosters
     {
         private void Awake()
         {
-            TexturesFolder = Directory.GetDirectories(Paths.PluginPath, PluginInfo.PLUGIN_NAME, SearchOption.AllDirectories).ToList<string>();
-            PostersFileNames = new List<string>();
-            TipsFileNames = new List<string>();
+            var folders = Directory.GetDirectories(Paths.PluginPath, PluginInfo.PLUGIN_NAME, SearchOption.AllDirectories).ToList<string>();
 
-            var postersFiles = Directory.GetFiles(Path.Combine(TexturesFolder, "posters"));
-            var tipsFiles = Directory.GetFiles(Path.Combine(TexturesFolder, "tips"));
-            
-            foreach (var textureFile in postersFiles)
+            foreach (var folder in folders)
             {
-                PostersFileNames.Add(textureFile);
+                foreach (var file in Directory.GetFiles(Path.Combine(folder, "posters")))
+                {
+                    PostersFileNames.Add(file);
+                }
+
+                foreach (var file in Directory.GetFiles(Path.Combine(folder, "tips")))
+                {
+                    TipsFileNames.Add(file);
+                }
             }
-            
-            foreach (var textureFile in tipsFiles)
-            {
-                TipsFileNames.Add(textureFile);
-            }
-            
+
             Patches.StartOfRoundPatches.Init(Logger);
-            
+
             var harmony = new Harmony(PluginInfo.PLUGIN_GUID);
             harmony.PatchAll(typeof(Patches.StartOfRoundPatches));
-            
+
             Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_NAME} ({PluginInfo.PLUGIN_VERSION}) is loaded!");
         }
 
-        public static string TexturesFolder;
-        public static List<string> PostersFileNames;
-        public static List<string> TipsFileNames;
+        public static List<string> PostersFileNames = [];
+        public static List<string> TipsFileNames = [];
     }
 }
