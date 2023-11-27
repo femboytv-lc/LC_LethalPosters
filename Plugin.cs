@@ -18,12 +18,12 @@ namespace LethalPosters
             {
                 foreach (var file in Directory.GetFiles(Path.Combine(folder, "posters")))
                 {
-                    PostersFileNames.Add(file);
+                    PosterFiles.Add(file);
                 }
 
                 foreach (var file in Directory.GetFiles(Path.Combine(folder, "tips")))
                 {
-                    TipsFileNames.Add(file);
+                    TipFiles.Add(file);
                 }
             }
 
@@ -35,7 +35,7 @@ namespace LethalPosters
             Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_NAME} ({PluginInfo.PLUGIN_VERSION}) is loaded!");
         }
 
-        public static List<string> PostersFileNames = [];
-        public static List<string> TipsFileNames = [];
+        public static List<string> PosterFiles = [];
+        public static List<string> TipFiles = [];
     }
 }

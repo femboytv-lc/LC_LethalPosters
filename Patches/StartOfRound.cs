@@ -22,17 +22,17 @@ internal class StartOfRoundPatches
         var rnd = new System.Random();
         var materials = GameObject.Find("Plane.001").GetComponent<MeshRenderer>().materials;
 
-        UpdateTexture(rnd, Plugin.PostersFileNames, materials[0]);
-        UpdateTexture(rnd, Plugin.TipsFileNames, materials[1]);
+        UpdateTexture(rnd, Plugin.PosterFiles, materials[0]);
+        UpdateTexture(rnd, Plugin.TipFiles, materials[1]);
     }
 
-    private static void UpdateTexture(System.Random rnd, List<string> fileNames, Material material)
+    private static void UpdateTexture(System.Random rnd, List<string> files, Material material)
     {
-        if (fileNames.Count == 0) {return;}
+        if (files.Count == 0) {return;}
 
-        var file = rnd.Next(fileNames.Count - 1);
+        var index = rnd.Next(files.Count - 1);
         var texture = new Texture2D(2, 2);
-        texture.LoadImage(File.ReadAllBytes(fileNames[file]));
+        texture.LoadImage(File.ReadAllBytes(files[index]));
         
         material.mainTexture = texture;
     }
