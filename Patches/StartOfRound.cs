@@ -20,6 +20,8 @@ internal class StartOfRoundPatches
     [HarmonyPostfix]
     private static void StartPatch()
     {
+        Logger.LogInfo("Patching the textures");
+        
         var materials = GameObject.Find("Plane.001").GetComponent<MeshRenderer>().materials;
 
         UpdateTexture(Plugin.PosterFiles, materials[0]);
@@ -31,12 +33,9 @@ internal class StartOfRoundPatches
         if (files.Count == 0) {return;}
 
         var index = Plugin.Rand.Next(files.Count);
-        Logger.LogInfo($"1.. {index}");
-        foreach (var str in files)
-        {
-            Logger.LogInfo($"2.. {str}");
-        }
+
         var texture = new Texture2D(2, 2);
+        Logger.LogInfo($"Patching {material.name} with {files[index]}");
         texture.LoadImage(File.ReadAllBytes(files[index]));
         
         material.mainTexture = texture;
