@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
+using System.Linq;
 using BepInEx;
-using BepInEx.Logging;
 using HarmonyLib;
 
 namespace LethalPosters
@@ -12,7 +11,7 @@ namespace LethalPosters
     {
         private void Awake()
         {
-            var folders = Directory.GetDirectories(Paths.PluginPath, PluginInfo.PLUGIN_NAME, SearchOption.AllDirectories).ToList<string>();
+            var folders = Directory.GetDirectories(Paths.PluginPath, PluginInfo.PLUGIN_NAME, SearchOption.AllDirectories).ToList();
 
             foreach (var folder in folders)
             {
@@ -35,7 +34,7 @@ namespace LethalPosters
             Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_NAME} ({PluginInfo.PLUGIN_VERSION}) is loaded!");
         }
 
-        public static List<string> PosterFiles = [];
-        public static List<string> TipFiles = [];
+        public static readonly List<string> PosterFiles = new();
+        public static readonly List<string> TipFiles = new();
     }
 }
