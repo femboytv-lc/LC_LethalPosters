@@ -27,11 +27,11 @@ namespace LethalPosters
                 }
             }
 
-            Patches.StartOfRoundPatches.Init(Logger);
+            Patches.Init(Logger);
 
             var harmony = new Harmony(PluginInfo.PLUGIN_GUID);
-            harmony.PatchAll(typeof(Patches.StartOfRoundPatches));
-
+            harmony.PatchAll(typeof(Patches));
+            
             Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_NAME} ({PluginInfo.PLUGIN_VERSION}) is loaded!");
         }
 

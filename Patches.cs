@@ -1,14 +1,12 @@
-﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using BepInEx.Logging;
 using HarmonyLib;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
-namespace LethalPosters.Patches;
+namespace LethalPosters;
 
-internal class StartOfRoundPatches
+internal class Patches
 {
     private static ManualLogSource Logger { get; set; }
     
