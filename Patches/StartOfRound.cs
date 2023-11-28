@@ -17,20 +17,29 @@ internal class StartOfRoundPatches
         Logger = logger;
     }
     
-    [HarmonyPatch(typeof(StartOfRound), "StartGame")] // Other function
     [HarmonyPatch(typeof(StartOfRound), "Start")]
-    [HarmonyPrefix]
-    private static void StartGamePatch()
+    [HarmonyPostfix]
+    private static void StartPatch()
+    {
+        Logger.LogInfo("Patching Start in StartOfRound");
+
+        UpdateMaterials(0);
+    }
+    
+    [HarmonyPatch(typeof(RoundManager), "GenerateNewLevelClientRpc")]
+    [HarmonyPostfix]
+    private static void GenerateNewLevelClientRpcPatch(int randomSeed)
+    {
+        Logger.LogInfo("Patching GenerateNewLevelClientRpc in RoundManager");
+
+        UpdateMaterials(randomSeed);
+    }
+
+    private static void UpdateMaterials(int seed)
     {
         Logger.LogInfo("Patching the textures");
 
-        var currentTime = (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-        var offset = currentTime % (2 * 60);
-        var seed = currentTime - offset;
-        
-        Logger.LogInfo($"Seed: {seed}, Current time: {currentTime}, Time offset: {offset}");
-        
-        Random.InitState(seed);
+        Plugin.Rand = new System.Random(seed);
         
         var materials = GameObject.Find("Plane.001").GetComponent<MeshRenderer>().materials;
         
@@ -42,7 +51,7 @@ internal class StartOfRoundPatches
     {
         if (files.Count == 0) {return;}
         
-        var index = Random.RandomRangeInt(0, files.Count);
+        var index = Plugin.Rand.Next(files.Count);
         
         var texture = new Texture2D(2, 2);
         Logger.LogInfo($"Patching {material.name} with {files[index]}");
