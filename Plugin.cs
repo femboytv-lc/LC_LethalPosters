@@ -36,6 +36,5 @@ namespace LethalPosters
 
         public static readonly List<string> PosterFiles = new();
         public static readonly List<string> TipFiles = new();
-        public static readonly System.Random Rand = new();
     }
 }

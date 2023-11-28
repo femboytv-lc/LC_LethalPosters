@@ -16,23 +16,41 @@ internal class StartOfRoundPatches
     }
     
     [HarmonyPatch(typeof(StartOfRound), "Start")]
-    [HarmonyPatch(typeof(StartOfRound), "StartGame")]
     [HarmonyPostfix]
     private static void StartPatch()
     {
-        Logger.LogInfo("Patching the textures");
+        Logger.LogInfo("Patched Start in StartOfRound");
         
-        var materials = GameObject.Find("Plane.001").GetComponent<MeshRenderer>().materials;
-
-        UpdateTexture(Plugin.PosterFiles, materials[0]);
-        UpdateTexture(Plugin.TipFiles, materials[1]);
+        UpdateMaterial(0);
     }
     
-    private static void UpdateTexture(List<string> files, Material material)
+    [HarmonyPatch(typeof(StartOfRound), "StartGame")]
+    [HarmonyPostfix]
+    // ReSharper disable once InconsistentNaming
+    private static void StartGamePatch(StartOfRound __instance)
+    {
+        Logger.LogInfo("Patched StartGame in StartOfRound");
+        
+        UpdateMaterial(__instance.randomMapSeed);
+    }
+
+    private static void UpdateMaterial(int seed)
+    {
+        Logger.LogInfo("Patching the textures");
+        
+        var rand = new System.Random(seed);
+
+        var materials = GameObject.Find("Plane.001").GetComponent<MeshRenderer>().materials;
+
+        UpdateTexture(rand, Plugin.PosterFiles, materials[0]);
+        UpdateTexture(rand, Plugin.TipFiles, materials[1]);
+    }
+    
+    private static void UpdateTexture(System.Random rand, IReadOnlyList<string> files, Material material)
     {
         if (files.Count == 0) {return;}
-
-        var index = Plugin.Rand.Next(files.Count);
+        
+        var index = rand.Next(files.Count);
 
         var texture = new Texture2D(2, 2);
         Logger.LogInfo($"Patching {material.name} with {files[index]}");
