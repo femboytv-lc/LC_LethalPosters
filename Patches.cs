@@ -29,7 +29,7 @@ internal class Patches
     private static void GenerateNewLevelClientRpcPatch(int randomSeed)
     {
         Logger.LogInfo("Patching GenerateNewLevelClientRpc in RoundManager");
-
+        
         UpdateMaterials(randomSeed);
     }
 
@@ -39,7 +39,7 @@ internal class Patches
 
         Plugin.Rand = new System.Random(seed);
         
-        var materials = GameObject.Find("Plane.001").GetComponent<MeshRenderer>().materials;
+        var materials = GameObject.Find("HangarShip/Plane.001").GetComponent<MeshRenderer>().materials;
         
         UpdateTexture(Plugin.PosterFiles, materials[0]);
         UpdateTexture(Plugin.TipFiles, materials[1]);
