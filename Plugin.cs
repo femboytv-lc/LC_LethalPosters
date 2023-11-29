@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using BepInEx;
 using HarmonyLib;
-using UnityEngine;
 
 namespace LethalPosters
 {
@@ -12,18 +12,24 @@ namespace LethalPosters
     {
         private void Awake()
         {
-            var folders = Directory.GetDirectories(Paths.PluginPath, PluginInfo.PLUGIN_NAME, SearchOption.AllDirectories).ToList();
-
-            foreach (var folder in folders)
+            PosterFolders = Directory.GetDirectories(Paths.PluginPath, PluginInfo.PLUGIN_NAME, SearchOption.AllDirectories).ToList();
+            
+            foreach (var folder in PosterFolders)
             {
                 foreach (var file in Directory.GetFiles(Path.Combine(folder, "posters")))
                 {
-                    PosterFiles.Add(file);
+                    if (Path.GetExtension(file) != ".old")
+                    {
+                        PosterFiles.Add(file);
+                    }
                 }
 
                 foreach (var file in Directory.GetFiles(Path.Combine(folder, "tips")))
                 {
-                    TipFiles.Add(file);
+                    if (Path.GetExtension(file) != ".old")
+                    {
+                        TipFiles.Add(file);
+                    }
                 }
             }
 
@@ -35,8 +41,9 @@ namespace LethalPosters
             Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_NAME} ({PluginInfo.PLUGIN_VERSION}) is loaded!");
         }
 
+        public static List<string> PosterFolders = new();
         public static readonly List<string> PosterFiles = new();
         public static readonly List<string> TipFiles = new();
-        public static System.Random Rand = new();
+        public static Random Rand = new();
     }
 }
