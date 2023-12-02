@@ -25,7 +25,4 @@
       <HintPath>libs\Assembly-CSharp.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <PropertyGroup>
-    <PostBuildEvent>copy "D:\Repos\LethalPosters\bin\Release\net47\LethalPosters.dll" "C:\Users\ElonGates\AppData\Roaming\r2modmanPlus-local\LethalCompany\profiles\Femboy\BepInEx\plugins\femboytv-LethalPosters\$(TargetFileName)"</PostBuildEvent>
-  </PropertyGroup>
 </Project>

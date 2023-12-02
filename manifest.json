@@ -1,0 +1,9 @@
+{
+  "name": "LethalPosters",
+  "version_number": "1.0.7",
+  "website_url": "https://femboy.tv",
+  "description": "Allows for editing of posters inside of the ship",
+  "dependencies": [
+    "BepInEx-BepInExPack-5.4.2100"
+  ]
+}
