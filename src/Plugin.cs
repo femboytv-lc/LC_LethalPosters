@@ -22,9 +22,9 @@ public class Plugin : BaseUnityPlugin
                 .ToArray();
             Logger.LogInfo("Discovered poster folders");
         }
-        catch (DirectoryNotFoundException)
+        catch (IOException)
         {
-            Logger.LogWarning("Couldn't find any posters folders.");
+            Logger.LogWarning("Couldn't find any posters folders due to an error.");
         }
         
         PosterFolders
