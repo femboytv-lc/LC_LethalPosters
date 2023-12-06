@@ -20,13 +20,13 @@ internal class ConfigBinder
     {
         var pluginName = pluginPosterFolder.Split(Path.DirectorySeparatorChar)[^2];
         
-        var conf = _plugin.Config.Bind(pluginName, "Enabled", true, $"Enable or disable {pluginName}");
-        var movePluginPosterFolderTo = $"{pluginPosterFolder}{(conf.Value ? "" : ".Disabled")}";
+        var pluginConfigEntry = _plugin.Config.Bind(pluginName, "Enabled", true, $"Enable or disable {pluginName}");
+        var movePluginPosterFolderTo = $"{pluginPosterFolder}{(pluginConfigEntry.Value ? "" : ".Disabled")}";
         if (pluginPosterFolder.Equals(movePluginPosterFolderTo)) return;
 
         try
         {
-            Directory.Move(pluginPosterFolder, $"{pluginPosterFolder}{(conf.Value ? "" : ".Disabled")}");
+            Directory.Move(pluginPosterFolder, $"{pluginPosterFolder}{(pluginConfigEntry.Value ? "" : ".Disabled")}");
         }
         catch (IOException)
         {
