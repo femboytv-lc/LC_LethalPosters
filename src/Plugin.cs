@@ -20,7 +20,7 @@ public class Plugin : BaseUnityPlugin
                 .Select(path => Path.Combine(path, PluginInfo.PLUGIN_NAME))
                 .Where(Directory.Exists)
                 .ToArray();
-            Logger.LogInfo("Discovered poster folders");
+            Logger.LogInfo("Discovered poster folders.");
         }
         catch (IOException)
         {
@@ -30,12 +30,12 @@ public class Plugin : BaseUnityPlugin
         PosterFolders
             .Select(path => Path.Combine(path, "posters"))
             .Do(LoadPostersFromPluginPostersFolder);
-        Logger.LogInfo("Loaded posters");
+        Logger.LogInfo("Loaded posters.");
         
         PosterFolders
             .Select(path => Path.Combine(path, "tips"))
             .Do(LoadTipsFromPluginTipsFolder);
-        Logger.LogInfo("Loaded tips");
+        Logger.LogInfo("Loaded tips.");
 
         Patches.Init(Logger);
 
@@ -52,7 +52,17 @@ public class Plugin : BaseUnityPlugin
             Directory.GetFiles(pluginPostersFolderPath, "*.png")
                 .Do(PosterFiles.Add);
         }
-        catch (DirectoryNotFoundException) {}
+        catch (IOException exception)
+        {
+            switch (exception)
+            {
+                case DirectoryNotFoundException:
+                    break;
+                default:
+                    Logger.LogWarning($"Couldn't load posters for {pluginPostersFolderPath.Split(Path.DirectorySeparatorChar)[^2]}");
+                    break;
+            }
+        }
     }
 
     private void LoadTipsFromPluginTipsFolder(string pluginTipsFolderPath)
@@ -62,7 +72,17 @@ public class Plugin : BaseUnityPlugin
             Directory.GetFiles(pluginTipsFolderPath, "*.png")
                 .Do(TipFiles.Add);
         }
-        catch (DirectoryNotFoundException) {}
+        catch (IOException exception)
+        {
+            switch (exception)
+            {
+                case DirectoryNotFoundException:
+                    break;
+                default:
+                    Logger.LogWarning($"Couldn't load tips for {pluginTipsFolderPath.Split(Path.DirectorySeparatorChar)[^2]}");
+                    break;
+            }
+        }
     }
 
     public static string[] PosterFolders { get; private set; } = { };
