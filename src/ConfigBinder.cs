@@ -1,6 +1,7 @@
 using System.IO;
 using BepInEx.Logging;
 using HarmonyLib;
+using Logger = HarmonyLib.Tools.Logger;
 
 namespace LethalPosters;
 
@@ -13,24 +14,13 @@ internal class ConfigBinder
     {
         _plugin = plugin;
         _logger = logger;
-        _plugin.PosterFolders.Do(BindExternalPluginConfigEntry);
+        _plugin.PluginsWithPosters.Do(BindExternalPluginConfigEntry);
+        _logger.LogInfo("Finishing binding ConfigEntries.");
     }
 
-    static void BindExternalPluginConfigEntry(string pluginPosterFolder)
-    {
-        var pluginName = pluginPosterFolder.Split(Path.DirectorySeparatorChar)[^2];
-        
-        var pluginConfigEntry = _plugin.Config.Bind(pluginName, "Enabled", true, $"Enable or disable {pluginName}");
-        var movePluginPosterFolderTo = $"{pluginPosterFolder}{(pluginConfigEntry.Value ? "" : ".Disabled")}";
-        if (pluginPosterFolder.Equals(movePluginPosterFolderTo)) return;
-
-        try
-        {
-            Directory.Move(pluginPosterFolder, $"{pluginPosterFolder}{(pluginConfigEntry.Value ? "" : ".Disabled")}");
-        }
-        catch (IOException)
-        {
-            _logger.LogWarning($"Couldn't rename {pluginName}'s posters folder due to an error.");
-        }
+    static void BindExternalPluginConfigEntry(Plugin.PluginWithPosters plugin)
+    {   
+        _logger.LogInfo($"Binding ConfigEntry for {plugin.PluginName}...");
+        plugin.AvailabilityConfigEntry = _plugin.Config.Bind(plugin.PluginName, "Enabled", true, $"Enable or disable {plugin.PluginName}");
     }
 }
