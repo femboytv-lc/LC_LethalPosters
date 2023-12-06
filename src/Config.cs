@@ -1,33 +1,36 @@
-using System;
 using System.IO;
-using BepInEx;
-using BepInEx.Configuration;
+using BepInEx.Logging;
+using HarmonyLib;
 
 namespace LethalPosters;
 
 internal class Config
 {
-    private static ConfigFile ConfigFile { get; set; }
-
-    static Config()
+    private static Plugin _plugin;
+    private static ManualLogSource _logger;
+    
+    public static void Init(Plugin plugin, ManualLogSource logger)
     {
-        ConfigFile = new ConfigFile(Paths.ConfigPath + "\\LethalPosters.cfg", true);
+        _plugin = plugin;
+        _logger = logger;
+        _plugin.PosterFolders.Do(BindExternalPluginConfigEntry);
+    }
 
-        foreach (var mod in Plugin.PosterFolders)
+    static void BindExternalPluginConfigEntry(string pluginPosterFolder)
+    {
+        var pluginName = pluginPosterFolder.Split(Path.DirectorySeparatorChar)[^2];
+        
+        var conf = _plugin.Config.Bind(pluginName, "Enabled", true, $"Enable or disable {pluginName}");
+        var movePluginPosterFolderTo = $"{pluginPosterFolder}{(conf.Value ? "" : ".Disabled")}";
+        if (pluginPosterFolder.Equals(movePluginPosterFolderTo)) return;
+
+        try
         {
-            var startIdx = mod.IndexOf(@"plugins\", StringComparison.Ordinal) + @"plugins\".Length;
-            var endIdx = mod.IndexOf(@"\LethalPosters", startIdx, StringComparison.Ordinal); 
-            var result = mod.Substring(startIdx, endIdx - startIdx);
-            
-            var conf = ConfigFile.Bind(result, "Enabled", true, $"Enable or disable {result}");
-            if (!conf.Value)
-            {
-                Directory.Move(mod, mod + ".Disabled");
-            }
-            else
-            {
-                
-            }
+            Directory.Move(pluginPosterFolder, $"{pluginPosterFolder}{(conf.Value ? "" : ".Disabled")}");
+        }
+        catch (IOException)
+        {
+            _logger.LogWarning("Couldn't find any posters folders due to an error.");
         }
     }
 }
