@@ -4,7 +4,7 @@ using HarmonyLib;
 
 namespace LethalPosters;
 
-internal class Config
+internal class ConfigBinder
 {
     private static Plugin _plugin;
     private static ManualLogSource _logger;
