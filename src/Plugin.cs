@@ -46,12 +46,11 @@ public class Plugin : BaseUnityPlugin
         Logger.LogInfo("Done!.");
     }
 
-    private void LoadPostersFromPluginPostersFolder(string pluginPostersFolderPath)
+    private string[] LoadPostersFromPlugin(PluginWithPosters plugin)
     {
         try
         {
-            Directory.GetFiles(pluginPostersFolderPath, "*.png")
-                .Do(PosterFiles.Add);
+            return Directory.GetFiles(plugin.PostersFolderPath(), "*.png");
         }
         catch (IOException exception)
         {
@@ -60,18 +59,18 @@ public class Plugin : BaseUnityPlugin
                 case DirectoryNotFoundException:
                     break;
                 default:
-                    Logger.LogWarning($"Couldn't load posters for {pluginPostersFolderPath.Split(Path.DirectorySeparatorChar)[^2]}");
+                    Logger.LogWarning($"Couldn't load posters for {plugin.PluginName}");
                     break;
             }
         }
+        return new string[] { };
     }
 
-    private void LoadTipsFromPluginTipsFolder(string pluginTipsFolderPath)
+    private string[] LoadTipsFromPlugin(PluginWithPosters plugin)
     {
         try
         {
-            Directory.GetFiles(pluginTipsFolderPath, "*.png")
-                .Do(TipFiles.Add);
+            return Directory.GetFiles(plugin.TipsFolderPath(), "*.png");
         }
         catch (IOException exception)
         {
@@ -80,13 +79,47 @@ public class Plugin : BaseUnityPlugin
                 case DirectoryNotFoundException:
                     break;
                 default:
-                    Logger.LogWarning($"Couldn't load tips for {pluginTipsFolderPath.Split(Path.DirectorySeparatorChar)[^2]}");
+                    Logger.LogWarning($"Couldn't load tips for {plugin.PluginName}");
                     break;
             }
         }
+        return new string[] { };
     }
     
     public string[] PosterFolders { get; private set; } = { };
     public readonly List<string> PosterFiles = new();
     public readonly List<string> TipFiles = new();
+
+    public class PluginWithPosters
+    {
+        public string PluginName { get; }
+        public ConfigEntry<bool> AvailabilityConfigEntry;
+        public string[] PostersFiles { get; private set; }
+        public string[] TipsFiles { get; private set; }
+
+        public PluginWithPosters(string pluginName)
+        {
+            PluginName = pluginName;
+        }
+
+        public void CachePosters(Plugin plugin)
+        {
+            PostersFiles = plugin.LoadPostersFromPlugin(this);
+        }
+
+        public void CacheTips(Plugin plugin)
+        {
+            TipsFiles = plugin.LoadTipsFromPlugin(this);
+        }
+
+        public static PluginWithPosters FromPluginLethalPostersFolder(string pluginLethalPostersFolder)
+        {
+            var pluginName = pluginLethalPostersFolder.Split(Path.DirectorySeparatorChar)[^2];
+            return new PluginWithPosters(pluginName);
+        }
+
+        public string PostersFolderPath() => Path.Combine(Paths.PluginPath, PluginName, PluginInfo.PLUGIN_NAME, "posters");
+        public string TipsFolderPath() => Path.Combine(Paths.PluginPath, PluginName, PluginInfo.PLUGIN_NAME, "tips");
+        public bool IsEnabled() => AvailabilityConfigEntry.Value;
+    }
 }
