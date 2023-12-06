@@ -9,6 +9,16 @@ namespace LethalPosters;
 [BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
 public class Plugin : BaseUnityPlugin
 {
+    public PluginWithPosters[] PluginsWithPosters { get; private set; } = { };
+
+    public IEnumerable<string> PosterFiles => PluginsWithPosters
+        .Where(plugin => plugin.IsEnabled())
+        .SelectMany(plugin => plugin.PostersFiles);
+    
+    public IEnumerable<string> TipFiles => PluginsWithPosters
+        .Where(plugin => plugin.IsEnabled())
+        .SelectMany(plugin => plugin.TipsFiles);
+    
     private void Awake()
     {
         Logger.LogInfo("Hello, world!");
@@ -85,10 +95,6 @@ public class Plugin : BaseUnityPlugin
         }
         return new string[] { };
     }
-    
-    public string[] PosterFolders { get; private set; } = { };
-    public readonly List<string> PosterFiles = new();
-    public readonly List<string> TipFiles = new();
 
     public class PluginWithPosters
     {
