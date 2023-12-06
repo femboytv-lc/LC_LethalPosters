@@ -12,7 +12,14 @@ public class Plugin : BaseUnityPlugin
 {
     private void Awake()
     {
-        PosterFolders = Directory.GetDirectories(Paths.PluginPath, $"*/{PluginInfo.PLUGIN_NAME}");
+        try
+        {
+            PosterFolders = Directory.GetDirectories(Paths.PluginPath, $"*/{PluginInfo.PLUGIN_NAME}");
+        }
+        catch (DirectoryNotFoundException)
+        {
+            Logger.LogWarning("Couldn't find any posters folders.");
+        }
         
         PosterFolders
             .Select(path => Path.Combine(path, "posters"))
