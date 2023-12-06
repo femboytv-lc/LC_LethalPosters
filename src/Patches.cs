@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using BepInEx.Logging;
 using HarmonyLib;
 using UnityEngine;
@@ -47,16 +48,20 @@ internal class Patches
         UpdateTexture(_plugin.TipFiles, materials[1]);
     }
     
-    private static void UpdateTexture(IReadOnlyList<string> files, Material material)
+    private static void UpdateTexture(IEnumerable<string> files, Material material)
     {
-        if (files.Count == 0) {return;}
+        var filesArray = files as string[] ?? files.ToArray();
+        if (filesArray.Length == 0)
+        {
+            _logger.LogWarning($"Tried to update {material.name} texture but had no source files to choose from!");
+            return;
+        }
         
-        var index = _randomSource.Next(files.Count);
-        
+        var index = _randomSource.Next(filesArray.Length);
         
         var texture = new Texture2D(2, 2);
-        _logger.LogInfo($"Updating {material.name} with {files[index]}");
-        texture.LoadImage(File.ReadAllBytes(files[index]));
+        _logger.LogInfo($"Updating {material.name} with {filesArray[index]}");
+        texture.LoadImage(File.ReadAllBytes(filesArray[index]));
         
         material.mainTexture = texture;
     }
