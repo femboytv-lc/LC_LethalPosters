@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net47</TargetFramework>
-    <AssemblyName>LethalPosters</AssemblyName>
+    <AssemblyName>com.github.femboytv.LethalPosters</AssemblyName>
     <Description>LethalCopmany posters API</Description>
     <Version>1.0.0</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
