@@ -36,6 +36,7 @@ public class Plugin : BaseUnityPlugin
         catch (IOException)
         {
             Logger.LogWarning("Couldn't find any posters folders due to an error.");
+            return;
         }
         
         Patches.Init(this, Logger);
