@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -36,8 +35,9 @@ public class Plugin : BaseUnityPlugin
             .Select(path => Path.Combine(path, "tips"))
             .Do(LoadTipsFromPluginTipsFolder);
         Logger.LogInfo("Loaded tips.");
-
-        Patches.Init(Logger);
+        
+        Patches.Init(this, Logger);
+        ConfigBinder.Init(this, Logger);
 
         var harmony = new Harmony(PluginInfo.PLUGIN_GUID);
         harmony.PatchAll(typeof(Patches));
@@ -85,9 +85,8 @@ public class Plugin : BaseUnityPlugin
             }
         }
     }
-
-    public static string[] PosterFolders { get; private set; } = { };
-    public static readonly List<string> PosterFiles = new();
-    public static readonly List<string> TipFiles = new();
-    public static Random Rand = new();
+    
+    public string[] PosterFolders { get; private set; } = { };
+    public readonly List<string> PosterFiles = new();
+    public readonly List<string> TipFiles = new();
 }
