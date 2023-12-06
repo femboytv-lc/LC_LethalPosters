@@ -41,8 +41,9 @@ public class Plugin : BaseUnityPlugin
 
         var harmony = new Harmony(PluginInfo.PLUGIN_GUID);
         harmony.PatchAll(typeof(Patches));
-            
-        Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_NAME} ({PluginInfo.PLUGIN_VERSION}) is loaded!");
+        Logger.LogInfo("Loaded patches.");
+        
+        Logger.LogInfo("Done!.");
     }
 
     private void LoadPostersFromPluginPostersFolder(string pluginPostersFolderPath)
