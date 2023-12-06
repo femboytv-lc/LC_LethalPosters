@@ -32,14 +32,22 @@ public class Plugin : BaseUnityPlugin
 
     private void LoadPostersFromPluginPostersFolder(string pluginPostersFolderPath)
     {
-        Directory.GetFiles(pluginPostersFolderPath, "*.png")
-            .Do(PosterFiles.Add);
+        try
+        {
+            Directory.GetFiles(pluginPostersFolderPath, "*.png")
+                .Do(PosterFiles.Add);
+        }
+        catch (DirectoryNotFoundException) {}
     }
 
     private void LoadTipsFromPluginTipsFolder(string pluginTipsFolderPath)
     {
-        Directory.GetFiles(pluginTipsFolderPath, "*.png")
-            .Do(TipFiles.Add);
+        try
+        {
+            Directory.GetFiles(pluginTipsFolderPath, "*.png")
+                .Do(TipFiles.Add);
+        }
+        catch (DirectoryNotFoundException) {}
     }
     
     public static string[] PosterFolders { get; private set; }
