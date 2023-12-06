@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFramework>net48</TargetFramework>
     <AssemblyName>tv.femboy.LethalPosters</AssemblyName>
     <Product>LethalPosters</Product>
     <Description>Lethal Company mod that allows players to customize in-game ship posters</Description>
