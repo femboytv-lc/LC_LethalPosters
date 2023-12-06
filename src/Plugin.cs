@@ -32,15 +32,13 @@ public class Plugin : BaseUnityPlugin
 
     private void LoadPostersFromPluginPostersFolder(string pluginPostersFolderPath)
     {
-        Directory.GetFiles(pluginPostersFolderPath)
-            .Where(file => Path.GetExtension(file) != ".old")
+        Directory.GetFiles(pluginPostersFolderPath, "*.png")
             .Do(PosterFiles.Add);
     }
 
     private void LoadTipsFromPluginTipsFolder(string pluginTipsFolderPath)
     {
-        Directory.GetFiles(pluginTipsFolderPath)
-            .Where(file => Path.GetExtension(file) != ".old")
+        Directory.GetFiles(pluginTipsFolderPath, "*.png")
             .Do(TipFiles.Add);
     }
     
