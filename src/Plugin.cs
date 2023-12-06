@@ -54,11 +54,33 @@ public class Plugin : BaseUnityPlugin
         Logger.LogInfo("Done!.");
     }
 
+    private bool IsImageFile(string filePath)
+    {
+        return Path.GetExtension(filePath).ToLower() switch
+        {
+            ".bmp" => true,
+            ".exr" => true,
+            ".gif" => true,
+            ".hdr" => true,
+            ".iff" => true,
+            ".jpg" => true,
+            ".jpeg" => true,
+            ".pict" => true,
+            ".png" => true,
+            ".psd" => true,
+            ".tga" => true,
+            ".tiff" => true,
+            _ => false,
+        };
+    }
+
     private string[] LoadPostersFromPlugin(PluginWithPosters plugin)
     {
         try
         {
-            return Directory.GetFiles(plugin.PostersFolderPath(), "*.png");
+            return Directory.GetFiles(plugin.PostersFolderPath(), "*")
+                .Where(IsImageFile)
+                .ToArray();
         }
         catch (IOException exception)
         {
@@ -78,7 +100,9 @@ public class Plugin : BaseUnityPlugin
     {
         try
         {
-            return Directory.GetFiles(plugin.TipsFolderPath(), "*.png");
+            return Directory.GetFiles(plugin.TipsFolderPath(), "*")
+                .Where(IsImageFile)
+                .ToArray();
         }
         catch (IOException exception)
         {
