@@ -16,7 +16,10 @@ public class Plugin : BaseUnityPlugin
 
         try
         {
-            PosterFolders = Directory.GetDirectories(Paths.PluginPath, $"*/{PluginInfo.PLUGIN_NAME}");
+            PosterFolders = Directory.GetDirectories(Paths.PluginPath, "*", SearchOption.TopDirectoryOnly)
+                .Select(path => Path.Combine(path, PluginInfo.PLUGIN_NAME))
+                .Where(Directory.Exists)
+                .ToArray();
             Logger.LogInfo("Discovered poster folders");
         }
         catch (DirectoryNotFoundException)
