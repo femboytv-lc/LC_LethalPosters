@@ -1,6 +1,5 @@
 [![Github](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fapi.github.com%2Frepos%2Ffemboytv%2FLC_LethalPosters&query=%24.stargazers_count&suffix=%20stars&style=for-the-badge&logo=github&logoColor=FFFFFF&label=%20&labelColor=121212&color=44cc11)](https://github.com/femboytv/LC_LethalPosters)
 [![Discord](https://img.shields.io/discord/1038789193113014333?style=for-the-badge&logo=discord&logoColor=%235865F2&label=%20&labelColor=%23121212&color=%235865F2)](https://discord.gg/VFRHNGrydD)
-[![Downloads](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fthunderstore.io%2Fapi%2Fexperimental%2Fpackage%2Ffemboytv%2FLethalPosters&query=%24.total_downloads&suffix=%20Downloads&style=for-the-badge&label=%20&color=1ca3f5)](https://thunderstore.io/c/lethal-company/p/femboytv/LethalPosters/)
 [![Build](https://img.shields.io/github/actions/workflow/status/femboytv/LC_LethalPosters/build.yml?style=for-the-badge&labelColor=%23121212)](https://github.com/femboytv/LC_LethalPosters/actions/workflows/build.yml)
 
 # Lethal Posters
