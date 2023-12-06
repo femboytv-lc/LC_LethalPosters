@@ -1,0 +1,40 @@
+name: Build
+
+on:
+  # Trigger the workflow on pushes to only the 'main' branch (this avoids duplicate checks being run e.g., for dependabot pull requests)
+  push:
+    branches: [ main ]
+  # Trigger the workflow on any pull request
+  pull_request:
+
+jobs:
+  
+  # Prepare environment and build packages
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      # Check out current repository
+      - name: Fetch Sources
+        uses: actions/checkout@v4
+      
+      # Set up .NET environment for the next steps
+      - uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: "8.0.x"
+          
+      # Add Lethal Company stubs to dependency list as GitHub runner doesn't have actual assemblies
+      - run: |
+          dotnet add src package LethalApi.GameLibs
+      
+      # Build packages
+      - name: Build
+        run: |
+          dotnet build
+      
+      # Store the built packages as an artifact 
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-artifacts
+          path: "src/bin/*.dll"
