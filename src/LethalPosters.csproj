@@ -3,8 +3,8 @@
   <PropertyGroup>
     <TargetFramework>net47</TargetFramework>
     <AssemblyName>com.github.femboytv.LethalPosters</AssemblyName>
-    <Product>Lethal Posters</Product>
-    <Description>LethalCopmany posters API</Description>
+    <Product>LethalPosters</Product>
+    <Description>Lethal Company mod that allows players to customise in-game ship posters</Description>
     <Version>1.0.0</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
