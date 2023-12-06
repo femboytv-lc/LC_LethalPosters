@@ -30,7 +30,7 @@ internal class ConfigBinder
         }
         catch (IOException)
         {
-            _logger.LogWarning("Couldn't find any posters folders due to an error.");
+            _logger.LogWarning($"Couldn't rename {pluginName}'s posters folder due to an error.");
         }
     }
 }
