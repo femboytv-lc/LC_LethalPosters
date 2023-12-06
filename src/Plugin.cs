@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -12,26 +12,15 @@ public class Plugin : BaseUnityPlugin
 {
     private void Awake()
     {
-        PosterFolders = Directory.GetDirectories(Paths.PluginPath, $"*/{PluginInfo.PLUGIN_NAME}").ToList();
-            
-        foreach (var folder in PosterFolders)
-        {
-            foreach (var file in Directory.GetFiles(Path.Combine(folder, "posters")))
-            {
-                if (Path.GetExtension(file) != ".old")
-                {
-                    PosterFiles.Add(file);
-                }
-            }
-
-            foreach (var file in Directory.GetFiles(Path.Combine(folder, "tips")))
-            {
-                if (Path.GetExtension(file) != ".old")
-                {
-                    TipFiles.Add(file);
-                }
-            }
-        }
+        PosterFolders = Directory.GetDirectories(Paths.PluginPath, $"*/{PluginInfo.PLUGIN_NAME}");
+        
+        PosterFolders
+            .Select(path => Path.Combine(path, "posters"))
+            .Do(LoadPostersFromPluginPostersFolder);
+        
+        PosterFolders
+            .Select(path => Path.Combine(path, "tips"))
+            .Do(LoadTipsFromPluginTipsFolder);
 
         Patches.Init(Logger);
 
@@ -41,7 +30,29 @@ public class Plugin : BaseUnityPlugin
         Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_NAME} ({PluginInfo.PLUGIN_VERSION}) is loaded!");
     }
 
-    public static List<string> PosterFolders = new();
+    private void LoadPostersFromPluginPostersFolder(string pluginPostersFolderPath)
+    {
+        foreach (var file in Directory.GetFiles(pluginPostersFolderPath))
+        {
+            if (Path.GetExtension(file) != ".old")
+            {
+                PosterFiles.Add(file);
+            }
+        }
+    }
+
+    private void LoadTipsFromPluginTipsFolder(string pluginTipsFolderPath)
+    {
+        foreach (var file in Directory.GetFiles(pluginTipsFolderPath))
+        {
+            if (Path.GetExtension(file) != ".old")
+            {
+                TipFiles.Add(file);
+            }
+        }
+    }
+    
+    public static string[] PosterFolders { get; private set; }
     public static readonly List<string> PosterFiles = new();
     public static readonly List<string> TipFiles = new();
     public static Random Rand = new();
