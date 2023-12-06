@@ -1,7 +1,5 @@
-using System.IO;
 using BepInEx.Logging;
 using HarmonyLib;
-using Logger = HarmonyLib.Tools.Logger;
 
 namespace LethalPosters;
 
