@@ -19,7 +19,8 @@ internal class ConfigBinder
     }
 
     static void BindExternalPluginConfigEntry(Plugin.PluginWithPosters plugin)
-    {   
+    {
+        if (plugin.PluginName is null) return;
         _logger.LogInfo($"Binding ConfigEntry for {plugin.PluginName}...");
         plugin.AvailabilityConfigEntry = _plugin.Config.Bind(plugin.PluginName, "Enabled", true, $"Enable or disable {plugin.PluginName}");
     }
