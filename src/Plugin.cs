@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -26,9 +27,7 @@ public class Plugin : BaseUnityPlugin
 
         try
         {
-            PluginsWithPosters = Directory.GetDirectories(Paths.PluginPath, "*", SearchOption.TopDirectoryOnly)
-                .Select(path => Path.Combine(path, PluginInfo.PLUGIN_NAME))
-                .Where(Directory.Exists)
+            PluginsWithPosters = Directory.GetDirectories(Paths.PluginPath, PluginInfo.PLUGIN_NAME, SearchOption.AllDirectories)
                 .Select(PluginWithPosters.FromPluginLethalPostersFolder)
                 .ToArray();
             Logger.LogInfo("Discovered poster folders.");
@@ -98,13 +97,15 @@ public class Plugin : BaseUnityPlugin
     public class PluginWithPosters
     {
         public string PluginName { get; }
+        public string LethalPostersFolder { get; }
         public ConfigEntry<bool> AvailabilityConfigEntry;
         public string[] PostersFiles { get; private set; }
         public string[] TipsFiles { get; private set; }
 
-        public PluginWithPosters(string pluginName)
+        public PluginWithPosters(string pluginName, string lethalPostersFolder)
         {
             PluginName = pluginName;
+            LethalPostersFolder = lethalPostersFolder;
         }
 
         public void CachePosters(Plugin plugin)
@@ -119,12 +120,15 @@ public class Plugin : BaseUnityPlugin
 
         public static PluginWithPosters FromPluginLethalPostersFolder(string pluginLethalPostersFolder)
         {
-            var pluginName = pluginLethalPostersFolder.Split(Path.DirectorySeparatorChar)[^2];
-            return new PluginWithPosters(pluginName);
+            var pathSegments = pluginLethalPostersFolder.Split(Path.DirectorySeparatorChar);
+            var pluginSegmentIndex = Array.IndexOf(pathSegments, "plugin");
+            var pluginName = pluginSegmentIndex == -1 ? null : pathSegments[pluginSegmentIndex + 1];
+            
+            return new PluginWithPosters(pluginName, pluginLethalPostersFolder);
         }
 
-        public string PostersFolderPath() => Path.Combine(Paths.PluginPath, PluginName, PluginInfo.PLUGIN_NAME, "posters");
-        public string TipsFolderPath() => Path.Combine(Paths.PluginPath, PluginName, PluginInfo.PLUGIN_NAME, "tips");
+        public string PostersFolderPath() => Path.Combine(LethalPostersFolder, PluginInfo.PLUGIN_NAME, "posters");
+        public string TipsFolderPath() => Path.Combine(LethalPostersFolder, PluginInfo.PLUGIN_NAME, "tips");
         public bool IsEnabled() => AvailabilityConfigEntry.Value;
     }
 }
