@@ -12,9 +12,12 @@ public class Plugin : BaseUnityPlugin
 {
     private void Awake()
     {
+        Logger.LogInfo("Hello, world!");
+
         try
         {
             PosterFolders = Directory.GetDirectories(Paths.PluginPath, $"*/{PluginInfo.PLUGIN_NAME}");
+            Logger.LogInfo("Discovered poster folders");
         }
         catch (DirectoryNotFoundException)
         {
@@ -24,10 +27,12 @@ public class Plugin : BaseUnityPlugin
         PosterFolders
             .Select(path => Path.Combine(path, "posters"))
             .Do(LoadPostersFromPluginPostersFolder);
+        Logger.LogInfo("Loaded posters");
         
         PosterFolders
             .Select(path => Path.Combine(path, "tips"))
             .Do(LoadTipsFromPluginTipsFolder);
+        Logger.LogInfo("Loaded tips");
 
         Patches.Init(Logger);
 
@@ -56,8 +61,8 @@ public class Plugin : BaseUnityPlugin
         }
         catch (DirectoryNotFoundException) {}
     }
-    
-    public static string[] PosterFolders { get; private set; }
+
+    public static string[] PosterFolders { get; private set; } = { };
     public static readonly List<string> PosterFiles = new();
     public static readonly List<string> TipFiles = new();
     public static Random Rand = new();
