@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using BepInEx;
+using BepInEx.Configuration;
 using HarmonyLib;
 
 namespace LethalPosters;
