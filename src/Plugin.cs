@@ -12,7 +12,7 @@ public class Plugin : BaseUnityPlugin
 {
     private void Awake()
     {
-        PosterFolders = Directory.GetDirectories(Paths.PluginPath, PluginInfo.PLUGIN_NAME, SearchOption.AllDirectories).ToList();
+        PosterFolders = Directory.GetDirectories(Paths.PluginPath, $"*/{PluginInfo.PLUGIN_NAME}").ToList();
             
         foreach (var folder in PosterFolders)
         {
@@ -40,9 +40,6 @@ public class Plugin : BaseUnityPlugin
             
         Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_NAME} ({PluginInfo.PLUGIN_VERSION}) is loaded!");
     }
-        
-        
-        
 
     public static List<string> PosterFolders = new();
     public static readonly List<string> PosterFiles = new();
