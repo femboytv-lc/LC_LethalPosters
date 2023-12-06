@@ -3,24 +3,27 @@ using System.IO;
 using BepInEx.Logging;
 using HarmonyLib;
 using UnityEngine;
+using Random = System.Random;
 
 namespace LethalPosters;
 
 internal class Patches
 {
-    private static ManualLogSource Logger { get; set; }
+    private static Plugin _plugin;
+    private static ManualLogSource _logger;
+    private static Random _randomSource;
     
-    public static void Init(ManualLogSource logger)
+    public static void Init(Plugin plugin, ManualLogSource logger)
     {
-        Logger = logger;
+        _plugin = plugin;
+        _logger = logger;
     }
     
     [HarmonyPatch(typeof(StartOfRound), "Start")]
     [HarmonyPostfix]
     private static void StartPatch()
     {
-        Logger.LogInfo("Patching Start in StartOfRound");
-
+        _logger.LogInfo("StartOfRound triggered poster refresh");
         UpdateMaterials(0);
     }
     
@@ -28,31 +31,31 @@ internal class Patches
     [HarmonyPostfix]
     private static void GenerateNewLevelClientRpcPatch(int randomSeed)
     {
-        Logger.LogInfo("Patching GenerateNewLevelClientRpc in RoundManager");
-        
+        _logger.LogInfo("GenerateNewLevelClientRpc triggered poster refresh");
         UpdateMaterials(randomSeed);
     }
 
     private static void UpdateMaterials(int seed)
     {
-        Logger.LogInfo("Patching the textures");
+        _logger.LogInfo("Updating textures...");
 
-        Plugin.Rand = new System.Random(seed);
+        _randomSource = new Random(seed);
         
         var materials = GameObject.Find("HangarShip/Plane.001").GetComponent<MeshRenderer>().materials;
         
-        UpdateTexture(Plugin.PosterFiles, materials[0]);
-        UpdateTexture(Plugin.TipFiles, materials[1]);
+        UpdateTexture(_plugin.PosterFiles, materials[0]);
+        UpdateTexture(_plugin.TipFiles, materials[1]);
     }
     
     private static void UpdateTexture(IReadOnlyList<string> files, Material material)
     {
         if (files.Count == 0) {return;}
         
-        var index = Plugin.Rand.Next(files.Count);
+        var index = _randomSource.Next(files.Count);
+        
         
         var texture = new Texture2D(2, 2);
-        Logger.LogInfo($"Patching {material.name} with {files[index]}");
+        _logger.LogInfo($"Updating {material.name} with {files[index]}");
         texture.LoadImage(File.ReadAllBytes(files[index]));
         
         material.mainTexture = texture;
