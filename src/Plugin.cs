@@ -38,18 +38,14 @@ public class Plugin : BaseUnityPlugin
             Logger.LogWarning("Couldn't find any posters folders due to an error.");
         }
         
-        PosterFolders
-            .Select(path => Path.Combine(path, "posters"))
-            .Do(LoadPostersFromPluginPostersFolder);
-        Logger.LogInfo("Loaded posters.");
-        
-        PosterFolders
-            .Select(path => Path.Combine(path, "tips"))
-            .Do(LoadTipsFromPluginTipsFolder);
-        Logger.LogInfo("Loaded tips.");
-        
         Patches.Init(this, Logger);
         ConfigBinder.Init(this, Logger);
+        
+        PluginsWithPosters.Do(plugin => plugin.CachePosters(this));
+        Logger.LogInfo("Loaded posters.");
+        
+        PluginsWithPosters.Do(plugin => plugin.CacheTips(this));
+        Logger.LogInfo("Loaded tips.");
 
         var harmony = new Harmony(PluginInfo.PLUGIN_GUID);
         harmony.PatchAll(typeof(Patches));
