@@ -21,7 +21,7 @@ jobs:
       # Set up .NET environment for the next steps
       - uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: "8.0.x"
+          dotnet-version: "7.x.x"
           
       # Add Lethal Company stubs to dependency list as GitHub runner doesn't have actual assemblies
       - run: |
