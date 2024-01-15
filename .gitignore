@@ -1,0 +1,6 @@
+﻿**/libs
+**/bin
+**/obj
+**/.idea
+**.DotSettings.user
+**.csproj.user
