@@ -151,8 +151,8 @@ public class Plugin : BaseUnityPlugin
             return new PluginWithPosters(pluginName, pluginLethalPostersFolder);
         }
 
-        public string PostersFolderPath() => Path.Combine(LethalPostersFolder, PluginInfo.PLUGIN_NAME, "posters");
-        public string TipsFolderPath() => Path.Combine(LethalPostersFolder, PluginInfo.PLUGIN_NAME, "tips");
+        public string PostersFolderPath() => Path.Combine(LethalPostersFolder, "posters");
+        public string TipsFolderPath() => Path.Combine(LethalPostersFolder, "tips");
         public bool IsEnabled() => AvailabilityConfigEntry.Value;
     }
 }
